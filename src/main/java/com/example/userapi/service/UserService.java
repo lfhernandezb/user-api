@@ -58,7 +58,7 @@ public class UserService {
 
     @Transactional
     public RegisterUserDto save(RegisterUserDto user) {
-
+        /*
         if (user.getEmail() != null && !user.getEmail().isEmpty()) {
             if (!validateEmail(user.getEmail())) {
                 throw new NameNotProvidedException("El email no es valido");
@@ -92,7 +92,7 @@ public class UserService {
         if (user.getPhones() == null || user.getPhones().isEmpty()) {
             throw new PhoneNotProvidedException("Debe proveer al menos un telefono");
         }
-
+        */
         Date date = new Date();
 
         if (user.getUserId() == null) {
@@ -113,8 +113,17 @@ public class UserService {
 
         } else {
             // actualizacion
-            user.setModified(date);
+            // verificamos que el usuario exista buscando por email
+            RegisterUserDto userDTO = getByEmail(user.getEmail());
+
+            if (userDTO != null) {
+                user.setModified(date);
+            } else {
+                throw new UserNotFoundException("Usuario no encontrado para actualizar");
+            }
         }
+
+        System.out.println("UserDTO: " + user.toString());
 
         RegisterUserDto ret = registerUserDtoRepository.save(user);
         /*

@@ -35,7 +35,6 @@ public class User {
     @Column(nullable = false, length = 16)
     private String password;
 
-    @JsonIgnoreProperties("phones")
     @OneToMany(fetch=FetchType.EAGER, mappedBy="user", cascade=CascadeType.ALL) // (cascade = {CascadeType.ALL})
     private List<Phone> phones;
 
@@ -49,8 +48,8 @@ public class User {
     private Date modified;
     @Column(name = "last_login")
     private Date lastLogin;
-    @Column(name = "is_active")
-    private boolean isActive;
+    @Column(name = "active")
+    private boolean active;
 
     public UUID getUserId() {
         return userId;
@@ -116,12 +115,12 @@ public class User {
         this.lastLogin = lastLogin;
     }
 
-    public boolean getIsActive() {
-        return isActive;
+    public boolean getActive() {
+        return active;
     }
 
-    public void setIsActive(boolean isActive) {
-        isActive = isActive;
+    public void setActive(boolean active) {
+        this.active = active;
     }
 
     public String getToken() {
@@ -144,7 +143,7 @@ public class User {
                 ", created=" + created +
                 ", modified=" + modified +
                 ", lastLogin=" + lastLogin +
-                ", isActive=" + isActive +
+                ", active=" + active +
                 '}';
     }
 }

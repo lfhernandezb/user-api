@@ -25,15 +25,28 @@ public interface RegisterUserDtoMapper {
             @Mapping(source = "created", target = "created"),
             @Mapping(source = "modified", target = "modified"),
             @Mapping(source = "lastLogin", target = "lastLogin"),
-            @Mapping(source = "isActive", target = "isActive"),
+            @Mapping(source = "active", target = "isActive"),
             @Mapping(target = "authorities", ignore = true),
     })
     RegisterUserDto toUserDto(User user);
     List<RegisterUserDto> toRegisterUserDtos(List<User> users);
 
     // dto -> entity
-    @InheritInverseConfiguration
+    @Mappings({
+            @Mapping(source = "userId", target = "userId"),
+            @Mapping(source = "name", target = "name"),
+            @Mapping(source = "email", target = "email"),
+            @Mapping(source = "password", target = "password"),
+            @Mapping(source = "phones", target = "phones"),
+            @Mapping(source = "token", target = "token"),
+            @Mapping(source = "created", target = "created"),
+            @Mapping(source = "modified", target = "modified"),
+            @Mapping(source = "lastLogin", target = "lastLogin"),
+            @Mapping(source = "isActive", target = "active"),
+            // @Mapping(source = "authorities", ignore = true),
+    })
+    //@InheritInverseConfiguration
     //@Mapping(target = "token", ignore = true)
     User toUser(RegisterUserDto userDto);
-    //List<User> toUsers(List<RegisterUserDto> registerUserDtos);
+    List<User> toUsers(List<RegisterUserDto> registerUserDtos);
 }

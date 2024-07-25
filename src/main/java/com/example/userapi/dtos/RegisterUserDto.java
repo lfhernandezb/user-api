@@ -1,15 +1,14 @@
 package com.example.userapi.dtos;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -23,28 +22,29 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+// @Data
 public class RegisterUserDto implements UserDetails {
 
     //@Value("${validation.password}")
     //private String passwordPattern;
-
+    // @JsonIgnoreProperties({"token", "password"})
     private UUID userId;
-    @NotEmpty(message = "Se requiere el nombre.")
-    @Size(min = 2, max = 64, message = "El largo del nombre debe estar entre 2 y 64 caracteress.")
+    // * @NotEmpty(message = "Se requiere el nombre.")
+    // * @Size(min = 2, max = 64, message = "El largo del nombre debe estar entre 2 y 64 caracteress.")
     private String name;
-    @NotEmpty(message = "Se requiere el email.")
-    @Email(message = "El email no es valido.",
-            flags = { Pattern.Flag.CASE_INSENSITIVE })
+    // * @NotEmpty(message = "Se requiere el email.")
+    // * @Email(message = "El email no es valido.", flags = { Pattern.Flag.CASE_INSENSITIVE })
     private String email;
-    @NotEmpty(message = "Se requiere la contrasenia.")
-    @Size(min = 8, max = 16, message = "El largo de la contrasenia debe estar entre 8 y 16 caracteres.")
+    // * @NotEmpty(message = "Se requiere la contrasenia.")
+    // * @Size(min = 8, max = 16, message = "El largo de la contrasenia debe estar entre 8 y 16 caracteres.")
     //@Pattern(regexp = "^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{8,}$", flags = { Pattern.Flag.CASE_INSENSITIVE, Pattern.Flag.MULTILINE }, message = "The password must have minimum eight characters, at least one letter and one number.")
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
 
     @Valid
-    @JsonIgnoreProperties("registerUserDto")
-    @NotEmpty(message = "Se requiere al menos un telefono.")
+    // * @NotEmpty(message = "Se requiere al menos un telefono.")
     private List<PhoneDto> phones;
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String token;
     private Date created;
     private Date modified;
@@ -68,7 +68,7 @@ public class RegisterUserDto implements UserDetails {
     }
 
     public UUID getUserId() {
-        return userId;
+        return this.userId;
     }
 
     public void setUserId(UUID userId) {
@@ -76,42 +76,46 @@ public class RegisterUserDto implements UserDetails {
     }
 
     public @NotEmpty(message = "Se requiere el nombre.") @Size(min = 2, max = 64, message = "The length of name must be between 2 and 64 characters.") String getName() {
-        return name;
+        return this.name;
     }
 
-    public void setName(@NotEmpty(message = "Se requiere el nombre.") @Size(min = 2, max = 64, message = "The length of name must be between 2 and 64 characters.") String name) {
+    public void setName(String name) {
         this.name = name;
     }
 
     public @NotEmpty(message = "Se requiere el email.") @Email(message = "El email no es validod.",
             flags = {Pattern.Flag.CASE_INSENSITIVE}) String getEmail() {
-        return email;
+        return this.email;
     }
 
-    public void setEmail(@NotEmpty(message = "Se requiere el email.") @Email(message = "El email no es valido.",
-            flags = {Pattern.Flag.CASE_INSENSITIVE}) String email) {
+    public void setEmail(String email) {
         this.email = email;
     }
 
-    @Override
     public @NotEmpty(message = "Se requiere la contrasenia.") @Size(min = 8, max = 16, message = "El largo de la contrasenia debe ser entre 8 y 16 caracteres.") String getPassword() {
-        return password;
+        return this.password;
     }
 
-    public void setPassword(@NotEmpty(message = "Se requiere la contrasenia.") @Size(min = 8, max = 16, message = "El largo de la contrasenia debe ser entre 8 y 16 caracteres.") String password) {
+    public void setPassword(String password) {
         this.password = password;
     }
 
     public @NotEmpty(message = "Se requiere al menos un telefono.") List<PhoneDto> getPhones() {
-        return phones;
+        return this.phones;
     }
 
-    public void setPhones(@NotEmpty(message = "Se requiere al menos un telefono.") List<PhoneDto> phones) {
+    public void setPhones(List<PhoneDto> phones) {
         this.phones = phones;
     }
 
+    public String getToken() { return token; }
+
+    public void setToken(String token) {
+        this.token = token;
+    }
+
     public Date getCreated() {
-        return created;
+        return this.created;
     }
 
     public void setCreated(Date created) {
@@ -119,7 +123,7 @@ public class RegisterUserDto implements UserDetails {
     }
 
     public Date getModified() {
-        return modified;
+        return this.modified;
     }
 
     public void setModified(Date modified) {
@@ -127,7 +131,7 @@ public class RegisterUserDto implements UserDetails {
     }
 
     public Date getLastLogin() {
-        return lastLogin;
+        return this.lastLogin;
     }
 
     public void setLastLogin(Date lastLogin) {
@@ -135,19 +139,11 @@ public class RegisterUserDto implements UserDetails {
     }
 
     public boolean getIsActive() {
-        return isActive;
+        return this.isActive;
     }
 
     public void setIsActive(boolean isActive) {
-        isActive = isActive;
-    }
-
-    public String getToken() {
-        return token;
-    }
-
-    public void setToken(String token) {
-        this.token = token;
+        this.isActive = isActive;
     }
 
     @Override
@@ -158,7 +154,6 @@ public class RegisterUserDto implements UserDetails {
                 ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
                 ", phones=" + phones +
-                ", token='" + token + '\'' +
                 ", created=" + created +
                 ", modified=" + modified +
                 ", lastLogin=" + lastLogin +

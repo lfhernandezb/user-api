@@ -1,0 +1,1 @@
+curl -X POST -H "Content-Type: application/json" -d "{\"name\":\"Luis Hernandez\", \"email\":\"lfhernandezb@gmail.com\", \"password\":\"s5p2rs2cr2t\", \"phones\":[{\"number\":\"53372570\", \"cityCode\":\"9\", \"countryCode\":\"56\"}, {\"number\":\"23603841\", \"cityCode\":\"2\", \"countryCode\":\"56\"}]}" http://localhost:8080/api/auth/signup

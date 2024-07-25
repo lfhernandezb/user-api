@@ -47,6 +47,8 @@ public class RegisterUserDtoRepositoryImpl implements RegisterUserDtoRepository 
 
         user.getPhones().forEach(phone -> phone.setUser(user));
 
+        System.out.println("User: " + user.toString());
+
         User u = userCrudRepository.save(user);
 
         logger.info("persisted User: " + u.toString());
